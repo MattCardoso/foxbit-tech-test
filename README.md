@@ -37,8 +37,34 @@ docker run --rm -p 8000:8000 server:latest
 
 ## Salvando imagem no GHCR
 
+Para acessar o registry do github [siga esse tutorial](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
+
 ```bash
 docker tag server:latest ghcr.io/mattcardoso/foxbit-tech-test:latest
 docker push ghcr.io/mattcardoso/foxbit-tech-test:latest
 
 ```
+
+## Fazendo o Deploy no kubernetes
+Via comandos kubectl:
+```bash
+kubectl apply -f deploy/deployment.yaml
+
+# rodar esse comando
+kubectl expose deployment server --type=NodePort --port=8000
+# ou
+kubectl apply -f deploy/service.yaml
+
+kubectl port-forward service/server 8000:8000
+
+```
+
+Em um outro terminal ou no navegador já podemos acessar o healthcheck:
+```bash
+
+curl 'localhost:8000/api/healthcheck'
+curl 'localhost:8000/api/sum?term_one=123&term_two=1'
+curl 'localhost:8000/api/sum?term_one=123&term_two='
+
+```
+
